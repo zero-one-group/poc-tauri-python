@@ -117,9 +117,9 @@ export function Gnome({ className, ...props }: React.HTMLProps<HTMLDivElement>) 
         )}
       >
         {!isWindowMaximized ? (
-          <Icons.maximizeWin className='h-2 w-2' />
+          <Icons.maximizeWin className='size-2' />
         ) : (
-          <Icons.maximizeRestoreWin className='h-[9px] w-[9px]' />
+          <Icons.maximizeRestoreWin className='size-[9px]' />
         )}
       </button>
       <button
@@ -129,7 +129,7 @@ export function Gnome({ className, ...props }: React.HTMLProps<HTMLDivElement>) 
           'aspect-square m-0 h-[24px] cursor-default rounded-full bg-[#dadada] p-0 text-[#3d3d3d] hover:bg-[#d1d1d1] active:bg-[#bfbfbf] dark:bg-[#373737] dark:text-white dark:hover:bg-[#424242] dark:active:bg-[#565656]'
         )}
       >
-        <Icons.closeWin className='h-2 w-2' />
+        <Icons.closeWin className='size-2' />
       </button>
     </div>
   )

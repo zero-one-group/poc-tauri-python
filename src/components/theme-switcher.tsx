@@ -38,13 +38,13 @@ export function ThemeSwitcher() {
           <span
             className={cn(
               darkmode ? 'i-heroicons-moon' : 'i-heroicons-light-bulb',
-              'h-4 w-4 text-gray-500'
+              'size-4 text-gray-500'
             )}
           ></span>
         </div>
         <select
           id='theme-switcher'
-          className='dark:bg-background-dark block w-full rounded-md border-gray-300 pl-9 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200/50 disabled:cursor-not-allowed disabled:bg-gray-50 dark:border-gray-700 dark:text-gray-300'
+          className='block w-full rounded-md border-gray-300 pl-9 text-sm focus:border-blue-300 focus:ring focus:ring-blue-200/50 disabled:cursor-not-allowed disabled:bg-gray-50 dark:border-gray-700 dark:bg-background-dark dark:text-gray-300'
           onChange={handleSelect}
           defaultValue={darkmode ? 'dark' : 'light'}
         >
