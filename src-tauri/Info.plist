@@ -1,0 +1,23 @@
+<!-- References: https://developer.apple.com/library/archive/qa/qa1937/_index.html -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <!-- Obviously needs to be replaced with your app's bundle identifier -->
+                <string>com.zero-one-group.tauri-python</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>tauri-python</string>
+                </array>
+            </dict>
+        </array>
+        <key>NSCameraUsageDescription</key>
+        <string>Requires camera access in order to capture and transmit video</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>Requires microphone access in order to capture and transmit audio</string>
+    </dict>
+</plist>
