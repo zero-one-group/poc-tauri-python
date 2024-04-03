@@ -34,3 +34,6 @@ dist-ssr
 # Tauri
 .tauri/
 target/
+src-tauri/bin/*
+/*.spec
+/venv/

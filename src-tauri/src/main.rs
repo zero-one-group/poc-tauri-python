@@ -10,9 +10,14 @@ mod menu;
 mod meta;
 mod utils;
 
-use tauri::RunEvent;
+use command_group::CommandGroup;
+use std::process::Command;
+use std::sync::mpsc::{sync_channel, Receiver};
+use std::thread;
+use tauri::api::process::Command as TCommand;
+
+use tauri::{RunEvent, WindowEvent};
 use tauri_plugin_log::{fern::colors::ColoredLevelConfig, LogTarget};
-use tauri_plugin_store::StoreBuilder;
 
 #[cfg(debug_assertions)]
 const LOG_TARGETS: [LogTarget; 2] = [LogTarget::Stdout, LogTarget::Webview];
@@ -27,6 +32,10 @@ const LOG_TARGETS: [LogTarget; 2] = [LogTarget::Stdout, LogTarget::LogDir];
 const LOG_LEVEL: log::LevelFilter = log::LevelFilter::Error;
 
 fn main() {
+    // Start the python server
+    let (tx, rx) = sync_channel(1);
+    run_backend(rx);
+
     let mut builder = tauri::Builder::default();
     let mut tauri_ctx = tauri::generate_context!();
 
@@ -44,7 +53,6 @@ fn main() {
                 .level(LOG_LEVEL)
                 .build(),
         )
-        .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_positioner::init())
         .plugin(plugin_window_theme::ThemePlugin::init(
             tauri_ctx.config_mut(),
@@ -56,12 +64,6 @@ fn main() {
         // the app icon from showing on the dock.
         #[cfg(target_os = "macos")]
         app.set_activation_policy(tauri::ActivationPolicy::Regular);
-
-        let config_dir = app.handle().path_resolver().app_config_dir().unwrap();
-        let config_path = config_dir.join("settings.json");
-        let store = StoreBuilder::new(app.handle(), config_path).build();
-
-        log::info!("STORE: {:?}", store.has("ui_config"));
 
         // Create main window for the application.
         utils::webview::create_window(&app.handle(), meta::MAIN_WINDOW, "index.html");
@@ -76,6 +78,16 @@ fn main() {
         .enable_macos_default_menu(false)
         .menu(menu::build_app_menu())
         .on_menu_event(menu::app_menu_event);
+
+    // Terminate the server before closing the main application
+    // Tell the child process to shutdown when app exits
+    builder = builder.on_window_event(move |event| match event.event() {
+        WindowEvent::Destroyed => {
+            tx.send(-1).expect("[Error] sending msg.");
+            println!("[Event] App closed, shutting down API...");
+        }
+        _ => {}
+    });
 
     // run the application
     builder
@@ -97,4 +109,22 @@ fn main() {
             }
             _ => {}
         });
+}
+
+fn run_backend(receiver: Receiver<i32>) {
+    log::info!("Starting API server...");
+
+    // `new_sidecar()` expects just the filename, NOT the whole path
+    let t =
+        TCommand::new_sidecar("main").expect("[Error] Failed to create `main.exe` binary command");
+    let mut group = Command::from(t)
+        .group_spawn()
+        .expect("[Error] spawning api server process.");
+    // If anyone knows how to log out stdout msg's from this process drop a comment. Rust is not my language.
+    thread::spawn(move || loop {
+        let s = receiver.recv();
+        if s.unwrap() == -1 {
+            group.kill().expect("[Error] killing api server process.");
+        }
+    });
 }

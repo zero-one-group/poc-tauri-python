@@ -15,20 +15,25 @@
         "allowlist": {
             "all": false,
             "shell": {
-                "all": false,
-                "open": "^(.+)/([^/]+)$"
+                "all": true,
+                "execute": true,
+                "sidecar": true,
+                "open": "^(.+)/([^/]+)$",
+                "scope": [
+                    {
+                        "name": "bin/server/main",
+                        "sidecar": true
+                    }
+                ]
             },
             "fs": {
                 "all": true,
                 "scope": ["$RESOURCE/*", "$HOME/Tauri Python/*"]
             },
             "http": {
-                "all": false,
+                "all": true,
                 "request": true,
-                "scope": [
-                    "https://github.com/zero-one-group/poc-tauri-python/*",
-                    "https://raw.githubusercontent.com/zero-one-group/poc-tauri-python/*"
-                ]
+                "scope": ["http://**", "https://**"]
             },
             "notification": {
                 "all": true
@@ -50,6 +55,7 @@
             "longDescription": "",
             "resources": [],
             "targets": ["app", "dmg", "nsis", "deb", "appimage", "updater"],
+            "externalBin": ["bin/server/main"],
             "macOS": {
                 "minimumSystemVersion": "10.13",
                 "frameworks": [],

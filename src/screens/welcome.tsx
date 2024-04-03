@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { fetch } from '@tauri-apps/api/http'
 import { invoke } from '@tauri-apps/api/tauri'
 import { info } from 'tauri-plugin-log-api'
 import { Link } from 'wouter'
@@ -12,6 +13,10 @@ import { AllQuotes } from '@/types/quotes'
 import reactLogo from '../assets/react.svg'
 import { ThemeSwitcher } from '../components/theme-switcher'
 import { cn, randomNumber } from '../libraries/utils'
+
+interface ApiResponse {
+  message: string
+}
 
 export default function WelcomeScreen() {
   const [greetMsg, setGreetMsg] = useState<string | undefined>(undefined)
@@ -45,6 +50,22 @@ export default function WelcomeScreen() {
     }
   }
 
+  const handleSidecar = async () => {
+    const res = await fetch<ApiResponse>('http://localhost:8008/api/hello', {
+      method: 'GET',
+      timeout: 30,
+    })
+
+    if (!res.ok) {
+      console.error(res.status)
+      return
+    }
+
+    const { message } = res.data
+
+    setGreetMsg(message)
+  }
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
@@ -53,14 +74,14 @@ export default function WelcomeScreen() {
         <h1 className='text-5xl font-bold dark:text-gray-100'>Howdy!</h1>
 
         <div className='mt-16 flex flex-wrap justify-center gap-5'>
-          <span className='h-20 w-20'>
-            <img src='/vite.svg' className='h-full w-full' alt='Vite logo' />
+          <span className='size-20'>
+            <img src='/vite.svg' className='size-full' alt='Vite logo' />
           </span>
-          <span className='h-20 w-20'>
-            <img src='/tauri.svg' className='h-full w-full' alt='Tauri logo' />
+          <span className='size-20'>
+            <img src='/tauri.svg' className='size-full' alt='Tauri logo' />
           </span>
-          <span className='h-20 w-20'>
-            <img src={reactLogo} className='h-full w-full' alt='React logo' />
+          <span className='size-20'>
+            <img src={reactLogo} className='size-full' alt='React logo' />
           </span>
         </div>
 
@@ -102,7 +123,7 @@ export default function WelcomeScreen() {
                       xmlns='http://www.w3.org/2000/svg'
                       viewBox='0 0 20 20'
                       fill='currentColor'
-                      className='h-4 w-4'
+                      className='size-4'
                     >
                       <path
                         fillRule='evenodd'
@@ -122,6 +143,9 @@ export default function WelcomeScreen() {
 
             <Button type='submit'>Say Hello</Button>
           </form>
+          <Button type='button' onClick={handleSidecar}>
+            Call Sidecar
+          </Button>
         </div>
         <p className={cn(name === '' ? 'hidden' : 'mt-8 max-w-2xl text-center dark:text-gray-100')}>
           {greetMsg}

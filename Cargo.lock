@@ -664,6 +664,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "command-group"
+version = "5.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a68fa787550392a9d58f44c21a3022cfb3ea3e2458b7f85d3b399d0ceeccf409"
+dependencies = [
+ "nix 0.27.1",
+ "winapi",
+]
+
+[[package]]
 name = "concurrent-queue"
 version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2553,6 +2563,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "nix"
+version = "0.27.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2eb04e9c688eff1c89d72b407f168cf79bb9e867a9d3323ed6c01519eb9cc053"
+dependencies = [
+ "bitflags 2.4.1",
+ "cfg-if",
+ "libc",
+]
+
+[[package]]
 name = "nodrop"
 version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4180,7 +4201,7 @@ dependencies = [
  "indexmap 1.9.3",
  "infer 0.9.0",
  "minisign-verify",
- "nix",
+ "nix 0.26.4",
  "notify-rust",
  "objc",
  "once_cell",
@@ -4306,23 +4327,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "tauri-plugin-store"
-version = "0.0.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v1#a5792e220aea568e2d9fabfceff15ef5fcca5473"
-dependencies = [
- "log",
- "serde",
- "serde_json",
- "tauri",
- "thiserror",
-]
-
-[[package]]
 name = "tauri-python"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "cocoa 0.25.0",
+ "command-group",
  "dotenv-build",
  "log",
  "machine-uid",
@@ -4336,7 +4346,6 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-log",
  "tauri-plugin-positioner",
- "tauri-plugin-store",
  "tokio",
  "ts-rs",
  "webkit2gtk",
@@ -5704,7 +5713,7 @@ dependencies = [
  "derive-new",
  "libc",
  "log",
- "nix",
+ "nix 0.26.4",
  "os_pipe",
  "tempfile",
  "thiserror",
@@ -5806,7 +5815,7 @@ version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2769203cd13a0c6015d515be729c526d041e9cf2c0cc478d57faee85f40c6dcd"
 dependencies = [
- "nix",
+ "nix 0.26.4",
  "winapi",
 ]
 
@@ -5834,7 +5843,7 @@ dependencies = [
  "futures-sink",
  "futures-util",
  "hex",
- "nix",
+ "nix 0.26.4",
  "once_cell",
  "ordered-stream",
  "rand 0.8.5",
